@@ -1,0 +1,9 @@
+coverage/
+node_modules/
+
+.DS_Store
+
+*.png
+*.jpeg
+*.jpg
+*.gif
