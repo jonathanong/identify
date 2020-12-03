@@ -1,31 +1,35 @@
 
 const { exec } = require('child_process')
 
-let sharp
-try {
-  sharp = require('sharp')
-} catch (_) {}
-
 class Identify {
   constructor (options = {}) {
-    this.vips = options.vips !== false && sharp
-    this.imagemagick = options.imagemagick !== false
-    Identify.detectImageMagick().then((supported) => {
-      if (!supported) this.imagemagick = false
-    })
+    this.sharp_enabled = options.sharp !== false
+    this.imagemagick_enabled = options.imagemagick !== false
+  }
+
+  get sharp () {
+    if (this._sharp != null) return this._sharp
+    this._sharp = Identify.detectSharp()
+    return this._sharp
+  }
+
+  get imagemagick () {
+    if (this._imagemagick) return this._imagemagick
+    this._imagemagick = Identify.detectImageMagick()
+    return this._imagemagick
   }
 
   identify = async (filename) => {
-    if (this.vips) return ['vips', await this._identifySharp(filename)]
-    if (this.imagemagick) return ['imagemagick', await this._identifyImageMagick(filename)]
+    if (this.sharp_enabled && this.sharp) return ['sharp', await this.identifySharp(filename)]
+    if (this.imagemagick_enabled && await this.imagemagick) return ['imagemagick', await this.identifyImageMagick(filename)]
     throw new Error('No supported image identification methods.')
   }
 
-  _identifySharp (filename) {
-
+  identifySharp (filename) {
+    return this.sharp(filename).metadata()
   }
 
-  _identifyImageMagick (filename) {
+  identifyImageMagick (filename) {
     return new Promise((resolve, reject) => {
       exec(`convert ${filename} json:`, (err, stdout) => {
         if (err) return reject(err)
@@ -36,6 +40,14 @@ class Identify {
         }
       })
     })
+  }
+}
+
+Identify.detectSharp = () => {
+  try {
+    return require('sharp')
+  } catch (_) {
+    return false
   }
 }
 
