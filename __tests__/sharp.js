@@ -11,5 +11,5 @@ const identify = new Identify({
 test('girl.png', async () => {
   const [method, result] = await identify.identify(path.resolve('fixtures/girl.png'))
   assert.strictEqual(method, 'sharp')
-  assert(result.format)
+  assert(result.format, result)
 })

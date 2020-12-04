@@ -11,5 +11,6 @@ const identify = new Identify({
 test('girl.png', async () => {
   const [method, result] = await identify.identify(path.resolve('fixtures/girl.png'))
   assert.strictEqual(method, 'imagemagick')
-  assert(result.image.colorspace)
+  assert(result, result)
+  assert(result.image.colorspace, result)
 })
