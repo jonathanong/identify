@@ -45,6 +45,14 @@ class Identify {
       })
     })
   }
+
+  normalize (...args) {
+    return Identify.normalize(...args)
+  }
+
+  isNotAnImageError (err) {
+
+  }
 }
 
 Identify.detectSharp = () => {
@@ -56,5 +64,29 @@ Identify.detectSharp = () => {
 }
 
 Identify.detectImageMagick = () => new Promise(resolve => exec('convert --version', err => resolve(!err)))
+
+// normalizes to sharp's format
+Identify.normalize = ([type, result]) => {
+  if (type === 'sharp') {
+    return {
+      format: result.format,
+      width: result.width,
+      height: result.height,
+      space: result.space,
+      hasAlpha: result.hasAlpha,
+    }
+  }
+  if (type === 'imagemagick') {
+    return {
+      format: result.image.format.toLowerCase(),
+      width: result.image.geometry.width,
+      height: result.image.geometry.height,
+      space: result.image.colorspace.toLowerCase(),
+      hasAlpha: !!result.image.channelDepth.alpha,
+    }
+  }
+
+  throw new Error('Unknown result type, must be imagemagick or sharp.')
+}
 
 module.exports = Identify
