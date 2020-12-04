@@ -36,7 +36,9 @@ class Identify {
         if (err) return reject(err)
         debug('convert stdout: %s', stdout)
         try {
-          resolve(JSON.parse(stdout)[0])
+          let data = JSON.parse(stdout)
+          if (Array.isArray(data)) [data] = data
+          resolve(data)
         } catch (err) {
           reject(err)
         }
