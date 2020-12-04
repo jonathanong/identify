@@ -28,6 +28,5 @@ jobs:
         key: node-modules-cache-os-${{ runner.os }}-node-${{ matrix.node-version }}-package-lock-${{ hashFiles('package-lock.json') }}-run-id-${{ github.run_id }}
         restore-keys: node-modules-cache-os-${{ runner.os }}-node-${{ matrix.node-version }}-package-lock-${{ hashFiles('package-lock.json') }}-
     - run: npm run eslint
-    - run: sudo apt-get install imagemagick --fix-missing
-    - run: npx jest --coverage --maxWorkers 2
+    - run: npm run test -- --ci --coverage --maxWorkers 2
     - run: npx codecov
