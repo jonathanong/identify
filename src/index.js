@@ -50,8 +50,8 @@ class Identify {
     return Identify.normalize(...args)
   }
 
-  isNotAnImageError (err) {
-
+  isNotAnImageError (...args) {
+    return Identify.isNotAnImageError(...args)
   }
 }
 
@@ -73,7 +73,7 @@ Identify.normalize = ([type, result]) => {
       width: result.width,
       height: result.height,
       space: result.space,
-      hasAlpha: result.hasAlpha,
+      hasAlpha: result.hasAlpha
     }
   }
   if (type === 'imagemagick') {
@@ -82,11 +82,19 @@ Identify.normalize = ([type, result]) => {
       width: result.image.geometry.width,
       height: result.image.geometry.height,
       space: result.image.colorspace.toLowerCase(),
-      hasAlpha: !!result.image.channelDepth.alpha,
+      hasAlpha: !!result.image.channelDepth.alpha
     }
   }
 
   throw new Error('Unknown result type, must be imagemagick or sharp.')
+}
+
+Identify.isNotAnImageError = (err) => {
+  // sharp
+  if (/\bunsupported image format\b/i.test(err.message)) return true
+  // imagemagick
+  if (/\bno decode delegate for this image format\b/i.test(err.message)) return true
+  return false
 }
 
 module.exports = Identify
