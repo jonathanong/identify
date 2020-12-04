@@ -5,7 +5,7 @@ const Identify = require('..')
 
 const identify = new Identify({
   sharp: false,
-  imagemagick: true,
+  imagemagick: true
 })
 
 test('girl.png', async () => {

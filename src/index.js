@@ -19,7 +19,7 @@ class Identify {
     return this._imagemagick
   }
 
-  identify = async (filename) => {
+  async identify (filename) {
     if (this.sharp_enabled && this.sharp) return ['sharp', await this.identifySharp(filename)]
     if (this.imagemagick_enabled && await this.imagemagick) return ['imagemagick', await this.identifyImageMagick(filename)]
     throw new Error('No supported image identification methods.')

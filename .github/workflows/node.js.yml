@@ -1,0 +1,32 @@
+name: Node.js CI
+
+on: push
+
+env:
+  CODECOV_TOKEN: bbe00372-ce70-4e5e-9572-0c98b18672ac
+  NPM_CONFIG_LOGLEVEL: error
+  NPM_CONFIG_JOBS: max
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x, 15.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm ci
+    - name: Cache node_modules/.cache
+      uses: actions/cache@v1
+      with:
+        path: node_modules/.cache
+        key: node-modules-cache-os-${{ runner.os }}-node-${{ matrix.node-version }}-package-lock-${{ hashFiles('package-lock.json') }}-run-id-${{ github.run_id }}
+        restore-keys: node-modules-cache-os-${{ runner.os }}-node-${{ matrix.node-version }}-package-lock-${{ hashFiles('package-lock.json') }}-
+    - run: npm run eslint
+    - run: npx jest --coverage --maxWorkers 2
+    - run: npx codecov
