@@ -1,6 +1,6 @@
 {
   "name": "@jongleberry/identify",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Image identification service with Vips via Sharp support falling back to ImageMagick",
   "scripts": {
     "eslint": "eslint --cache --cache-location=node_modules/.cache/eslint .",
