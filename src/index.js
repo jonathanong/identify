@@ -1,4 +1,5 @@
 
+const debug = require('debug')('jongleberry:identify')
 const { exec } = require('child_process')
 
 class Identify {
@@ -33,6 +34,7 @@ class Identify {
     return new Promise((resolve, reject) => {
       exec(`convert ${filename} json:`, (err, stdout) => {
         if (err) return reject(err)
+        debug('convert stdout: %s', stdout)
         try {
           resolve(JSON.parse(stdout)[0])
         } catch (err) {
