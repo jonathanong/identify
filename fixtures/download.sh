@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [ ! -f "fixtures/girl.png" ]; then
-  curl https://homepages.cae.wisc.edu/~ece533/images/girl.png -o fixtures/girl.png
+  curl https://upload.wikimedia.org/wikipedia/commons/6/6a/PNG_Test.png -o fixtures/girl.png
 fi
 
 if [ ! -f "fixtures/text2.png" ]; then
